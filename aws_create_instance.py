@@ -3,27 +3,32 @@ import botocore.exceptions
 from datetime import datetime
 import time
 
-def get_latest_ubuntu_ami(region, access_key, secret_key):
+# 预定义的区域与 Ubuntu 22.04 Server (amd64, HVM, EBS gp2) AMI ID 对照表
+UBUNTU_AMI_MAPPING = {
+    'us-east-1': 'ami-0a13e2564b4c1f58a',
+    'us-east-2': 'ami-0b2e2a9fd5b85c819',
+    'us-west-1': 'ami-0c76a5a9e3f8a6f71',
+    'us-west-2': 'ami-0b5df5ed1e3bfc9a3',
+    'eu-west-1': 'ami-0b8d1dcbdaf2b1e4c',
+    'eu-central-1': 'ami-0b1cf19c6e631b9a3',
+    'ap-southeast-1': 'ami-09aa15d321b39a2f4',
+    'ap-southeast-2': 'ami-0e3b0fad204d7f7a1',
+    'ap-northeast-1': 'ami-0e78a27a6c0b2a8a1',
+    'ap-northeast-2': 'ami-0c9d0ec2ae8e74bcf',
+    'sa-east-1': 'ami-0cba12f5ff23a7c97',
+    'ca-central-1': 'ami-02e76f23347b8e87f'
+}
+
+def get_ubuntu_ami_from_mapping(region):
     """
-    获取指定区域最新的 Ubuntu 22.04 Server AMI ID，
-    通过 AWS SSM Parameter Store 查询参数：
-    /aws/service/canonical/ubuntu/server/22.04/stable/current/amd64/hvm/ebs-gp2/ami-id
+    根据传入的区域代码，从预定义对照表中获取 Ubuntu 22.04 Server 的 AMI ID
     """
-    ssm_client = boto3.client(
-        'ssm',
-        region_name=region,
-        aws_access_key_id=access_key,
-        aws_secret_access_key=secret_key
-    )
-    parameter_name = '/aws/service/canonical/ubuntu/server/22.04/stable/current/amd64/hvm/ebs-gp2/ami-id'
-    try:
-        response = ssm_client.get_parameter(Name=parameter_name)
-        ami_id = response['Parameter']['Value']
-        print(f"[INFO] 在区域 {region} 获取的最新 Ubuntu 22.04 AMI ID: {ami_id}")
-        return ami_id
-    except botocore.exceptions.ClientError as e:
-        print(f"[ERROR] 获取 AMI ID 时出错: {e}")
-        return None
+    ami_id = UBUNTU_AMI_MAPPING.get(region)
+    if ami_id:
+        print(f"[INFO] 使用静态对照表，在区域 {region} 获取的 Ubuntu 22.04 AMI ID: {ami_id}")
+    else:
+        print(f"[ERROR] 区域 {region} 未配置对应的 Ubuntu 22.04 AMI ID！")
+    return ami_id
 
 def get_or_create_security_group(ec2_client, vpc_id):
     """
@@ -95,14 +100,13 @@ def get_or_create_security_group(ec2_client, vpc_id):
         print(f"[ERROR] 创建安全组时出错: {e}")
         return None
 
-
 def create_ec2_instance(instance_type, region, access_key, secret_key):
     """
     创建 EC2 实例：
       - 参数 instance_type 如 't3.micro'
       - 参数 region 如 'us-west-1'
       - 使用 access_key 和 secret_key 初始化 boto3 客户端
-      - AMI ID 自动根据区域获取最新 Ubuntu 22.04 Server 版本
+      - 根据区域代码获取对照表中的最新 Ubuntu 22.04 Server AMI ID
       - 安全组由自动生成的 lanst-sg-(timestamp) 安全组
       - UserData 为启动后自动执行远程脚本安装 Shadowsocks
     """
@@ -114,8 +118,8 @@ def create_ec2_instance(instance_type, region, access_key, secret_key):
         aws_secret_access_key=secret_key
     )
 
-    # 获取最新 Ubuntu 22.04 AMI ID
-    ami_id = get_latest_ubuntu_ami(region, access_key, secret_key)
+    # 从对照表中获取 Ubuntu 22.04 AMI ID
+    ami_id = get_ubuntu_ami_from_mapping(region)
     if not ami_id:
         print("[ERROR] 无法获取 AMI ID，终止实例创建。")
         return
@@ -180,7 +184,6 @@ sudo ./install_shadowsocks.sh
     return {"instance_id": instance_id, "public_ip": public_ip,"region": region,"access_key": access_key,"secret_key": secret_key}
 
 
-
 # 示例调用
 if __name__ == "__main__":
     
@@ -188,5 +191,6 @@ if __name__ == "__main__":
     # 创建成功后返回实例ID与实例公开 IP 地址
     instance_info = create_ec2_instance('t2.micro', 'us-west-1', '', '')
     if instance_info:
-        instance_id, public_ip = instance_info
+        instance_id = instance_info.get("instance_id")
+        public_ip = instance_info.get("public_ip")
         print(f"\n最终结果 -> 实例ID: {instance_id}, 实例公开 IP: {public_ip}")
