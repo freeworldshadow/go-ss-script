@@ -14,7 +14,7 @@ set -e
 echo "🔧 开始安装 Shadowsocks（适配 ARM64）"
 
 # === 更新系统 ===
-sudo apt update && sudo apt upgrade -y
+sudo -E apt update && sudo -E apt upgrade -y
 sudo apt install -y curl git
 
 # === 检测系统架构 ===
