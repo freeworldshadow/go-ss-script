@@ -1,7 +1,12 @@
 #!/bin/bash
 
-# Preseed debconf to only restart 'cron' if it's listed in the services prompt
-echo "shared/restart-services string cron" | sudo debconf-set-selections
+# 将 needrestart 的模式设为自动重启，避免弹窗
+export NEEDRESTART_MODE=a
+# 如无需求可直接暂停 needrestart
+# export NEEDRESTART_SUSPEND=1
+
+# 将 APT/Debian 配置为非交互
+export DEBIAN_FRONTEND=noninteractive
 
 
 set -e
