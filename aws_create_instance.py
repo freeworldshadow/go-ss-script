@@ -5,18 +5,47 @@ import time
 
 # 预定义的区域与 Ubuntu 22.04 Server (amd64, HVM, EBS gp2) AMI ID 对照表
 UBUNTU_AMI_MAPPING = {
-    'us-east-1': 'ami-0a13e2564b4c1f58a',
-    'us-east-2': 'ami-0b2e2a9fd5b85c819',
-    'us-west-1': 'ami-0c76a5a9e3f8a6f71',
-    'us-west-2': 'ami-0b5df5ed1e3bfc9a3',
-    'eu-west-1': 'ami-0b8d1dcbdaf2b1e4c',
-    'eu-central-1': 'ami-0b1cf19c6e631b9a3',
-    'ap-southeast-1': 'ami-09aa15d321b39a2f4',
-    'ap-southeast-2': 'ami-0e3b0fad204d7f7a1',
-    'ap-northeast-1': 'ami-0e78a27a6c0b2a8a1',
-    'ap-northeast-2': 'ami-0c9d0ec2ae8e74bcf',
-    'sa-east-1': 'ami-0cba12f5ff23a7c97',
-    'ca-central-1': 'ami-02e76f23347b8e87f'
+   # US Regions
+    'us-east-1':      'ami-0fc5d935ebf8bc3bc',  # US East (N. Virginia)
+    'us-east-2':      'ami-0e83be366243f524a',  # US East (Ohio)
+    'us-west-1':      'ami-0cbd40f694b804622',  # US West (N. California)
+    'us-west-2':      'ami-0efcece6bed30fd98',  # US West (Oregon)
+
+    # Canada Regions
+    'ca-central-1':   'ami-07363c2773202516a',  # Canada (Central)
+    'ca-west-1':      'ami-094f0839a8205b769',  # Canada West (Calgary) - Newer Region
+
+    # Europe Regions
+    'eu-central-1':   'ami-0f5d80173c368b32d',  # Europe (Frankfurt)
+    'eu-west-1':      'ami-00aa9d3df94c6c354',  # Europe (Ireland)
+    'eu-west-2':      'ami-01c75f1979c7a73d5',  # Europe (London)
+    'eu-west-3':      'ami-0ddce0190495780a1',  # Europe (Paris)
+    'eu-north-1':     'ami-03a849731eb497481',  # Europe (Stockholm)
+    'eu-south-1':     'ami-0d4f27819401831d4',  # Europe (Milan)
+    'eu-south-2':     'ami-0283e898efd3a5e49',  # Europe (Spain) - Newer Region
+    'eu-central-2':   'ami-02ac53b241137fe1e',  # Europe (Zurich) - Newer Region
+
+    # Asia Pacific Regions
+    'ap-east-1':      'ami-0c3b09a14a8091c8b',  # Asia Pacific (Hong Kong)
+    'ap-south-1':     'ami-06604670cba36d461',  # Asia Pacific (Mumbai)
+    'ap-south-2':     'ami-089c1a047a5f8f673',  # Asia Pacific (Hyderabad) - Newer Region
+    'ap-southeast-1': 'ami-0be798e4c4c02c8c3',  # Asia Pacific (Singapore)
+    'ap-southeast-2': 'ami-056e32c1777818b48',  # Asia Pacific (Sydney)
+    'ap-southeast-3': 'ami-066944a354375366f',  # Asia Pacific (Jakarta) - Newer Region
+    'ap-southeast-4': 'ami-062aeb770a783e87c',  # Asia Pacific (Melbourne) - Newer Region
+    'ap-northeast-1': 'ami-03f4fa37693460651',  # Asia Pacific (Tokyo)
+    'ap-northeast-2': 'ami-057f0a1f1a11401c7',  # Asia Pacific (Seoul)
+    'ap-northeast-3': 'ami-0687a7455b487f53c',  # Asia Pacific (Osaka)
+
+    # Middle East Regions
+    'me-south-1':     'ami-0684fb956767a60f9',  # Middle East (Bahrain)
+    'me-central-1':   'ami-0f47c5367a96307b1',  # Middle East (UAE) - Newer Region
+
+    # Africa Regions
+    'af-south-1':     'ami-091469a9887026760',  # Africa (Cape Town)
+
+    # South America Regions
+    'sa-east-1':      'ami-08d92c27d5e64c349',  # South America (Sao Paulo)
 }
 
 def get_ubuntu_ami_from_mapping(region):
