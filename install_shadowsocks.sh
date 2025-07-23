@@ -1,5 +1,8 @@
 #!/bin/bash
 
+export HOME=/root
+export GOCACHE=/tmp/gocache
+
 # 将 needrestart 的模式设为自动重启，避免弹窗
 export NEEDRESTART_MODE=a
 # 如无需求可直接暂停 needrestart
