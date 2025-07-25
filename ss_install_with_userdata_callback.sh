@@ -83,5 +83,5 @@ sudo sysctl -p
 
 echo "✅ Shadowsocks 安装完成，已启用 BBR，加密算法：aes-256-gcm，监听端口：443"
 
-# 回传ip到Bussiness-server
-curl -s -X POST https://www.m9876.xyz/api/instances/userdata-callback
+# 回传aws-instance-public-ip到Bussiness-server
+curl -s -X POST https://app.vpnin.xyz/api/aws/rent-userdata-callback
