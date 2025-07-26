@@ -83,5 +83,29 @@ sudo sysctl -p
 
 echo "✅ Shadowsocks 安装完成，已启用 BBR，加密算法：aes-256-gcm，监听端口：443"
 
+
+### —— 在此处插入：禁用 IPv6 —— ###
+echo "🔧 禁用 IPv6"
+sudo tee -a /etc/sysctl.d/99-sysctl.conf <<'EOF'
+
+# 禁用 IPv6
+net.ipv6.conf.all.disable_ipv6 = 1
+net.ipv6.conf.default.disable_ipv6 = 1
+net.ipv6.conf.lo.disable_ipv6 = 1
+EOF
+# 重新加载所有 sysctl 配置
+sudo sysctl --system > /dev/null
+
+# 验证（可选）
+if sysctl net.ipv6.conf.all.disable_ipv6 | grep -q '= 1' \
+  && sysctl net.ipv6.conf.default.disable_ipv6 | grep -q '= 1' \
+  && sysctl net.ipv6.conf.lo.disable_ipv6 | grep -q '= 1'; then
+  echo "✅ IPv6 已禁用"
+else
+  echo "⚠️ IPv6 禁用失败"
+fi
+### —— 禁用 IPv6 完成 —— ###
+
+
 # 回传aws-instance-public-ip到Bussiness-server
 curl -s -X POST https://app.vpnin.xyz/api/aws/rent-userdata-callback
