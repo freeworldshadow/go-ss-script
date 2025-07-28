@@ -106,6 +106,12 @@ else
 fi
 ### —— 禁用 IPv6 完成 —— ###
 
+# === 新增：将外部 8838 端口流量转发到本地 443 ===
+echo "🔧 添加端口转发：8838 → 443"
+sudo iptables -t nat -A PREROUTING -p tcp --dport 8838 -j REDIRECT --to-ports 443
+sudo iptables -t nat -A PREROUTING -p udp --dport 8838 -j REDIRECT --to-ports 443
+echo "✅ 端口转发规则已生效"
+
 
 # 回传aws-instance-public-ip到Bussiness-server
 curl -s -X POST https://app.vpnin.xyz/api/aws/rent-userdata-callback
