@@ -42,7 +42,22 @@ echo 'export PATH=$PATH:$GOPATH/bin' >> ~/.profile
 source ~/.profile
 
 # === 安装 go-shadowsocks2 ===
-go install github.com/shadowsocks/go-shadowsocks2@latest
+# 为[go install github.com/shadowsocks/go-shadowsocks2@latest]增加循环重试机制，应对网络抖动
+echo "=== 安装 go-shadowsocks2 ==="
+MAX_ATTEMPTS=5
+ATTEMPT=1
+echo "🔧 开始安装 go-shadowsocks2，最多尝试 $MAX_ATTEMPTS 次..."
+until go install github.com/shadowsocks/go-shadowsocks2@latest; do
+    ATTEMPT=$((ATTEMPT + 1))
+    if [ $ATTEMPT -gt $MAX_ATTEMPTS ]; then
+        echo "❌ go install 命令在尝试 $MAX_ATTEMPTS 次后仍然失败。"
+        exit 1
+    fi
+    echo "⚠️ go install 失败，将在 10 秒后重试 (第 $ATTEMPT 次)..."
+    sleep 10
+done
+echo "✅ go-shadowsocks2 安装成功。"
+# go install github.com/shadowsocks/go-shadowsocks2@latest
 
 # === 写入配置文件 ===
 mkdir -p ~/.config
