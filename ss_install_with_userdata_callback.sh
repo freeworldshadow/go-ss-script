@@ -63,7 +63,7 @@ mkdir -p ~/.config
 cat > ~/.config/shadowsocks.json <<EOF
 {
   "server": "0.0.0.0",
-  "port": 443,
+  "port": 16888,
   "method": "aes-256-gcm",
   "password": "amazongreatvpn",
   "timeout": 300
@@ -77,7 +77,7 @@ Description=Shadowsocks Server
 After=network.target
 
 [Service]
-ExecStart=/root/go/bin/go-shadowsocks2 -s "0.0.0.0:443" -cipher "aes-256-gcm" -password "amazongreatvpn" -verbose
+ExecStart=/root/go/bin/go-shadowsocks2 -s "0.0.0.0:16888" -cipher "aes-256-gcm" -password "amazongreatvpn" -verbose
 Restart=on-failure
 
 [Install]
@@ -95,7 +95,7 @@ echo "net.core.default_qdisc=fq" | sudo tee -a /etc/sysctl.conf
 echo "net.ipv4.tcp_congestion_control=bbr" | sudo tee -a /etc/sysctl.conf
 sudo sysctl -p
 
-echo "✅ Shadowsocks 安装完成，已启用 BBR，加密算法：aes-256-gcm，监听端口：443"
+echo "✅ Shadowsocks 安装完成，已启用 BBR，加密算法：aes-256-gcm，监听端口：16888"
 
 
 ### —— 在此处插入：禁用 IPv6 —— ###
@@ -120,10 +120,10 @@ else
 fi
 ### —— 禁用 IPv6 完成 —— ###
 
-# === 新增：将外部 8838 端口流量转发到本地 443 ===
-echo "🔧 添加端口转发：8838 → 443"
-sudo iptables -t nat -A PREROUTING -p tcp --dport 8838 -j REDIRECT --to-ports 443
-sudo iptables -t nat -A PREROUTING -p udp --dport 8838 -j REDIRECT --to-ports 443
+# === 新增：将外部 8838 端口流量转发到本地 16888 ===
+echo "🔧 添加端口转发：8838 → 16888"
+sudo iptables -t nat -A PREROUTING -p tcp --dport 8838 -j REDIRECT --to-ports 16888
+sudo iptables -t nat -A PREROUTING -p udp --dport 8838 -j REDIRECT --to-ports 16888
 echo "✅ 端口转发规则已生效"
 
 
