@@ -77,7 +77,7 @@ Description=Shadowsocks Server
 After=network.target
 
 [Service]
-ExecStart=/root/go/bin/go-shadowsocks2 -s "0.0.0.0:16888" -cipher "aes-256-gcm" -password "amazongreatvpn" -verbose
+ExecStart=/root/go/bin/go-shadowsocks2 -s "0.0.0.0:16888" -cipher "aes-256-gcm" -password "amazongreatvpn" -verbose -u
 Restart=on-failure
 
 [Install]
@@ -127,5 +127,5 @@ sudo iptables -t nat -A PREROUTING -p udp --dport 8838 -j REDIRECT --to-ports 16
 echo "✅ 端口转发规则已生效"
 
 
-# 回传aws-instance-public-ip到Bussiness-server
-curl -s -X POST https://app.vpnin.xyz/api/aws/rent-userdata-callback
+# # 回传aws-instance-public-ip到Bussiness-server
+# curl -s -X POST https://app.vpnin.xyz/api/aws/rent-userdata-callback
