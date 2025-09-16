@@ -115,7 +115,7 @@ Description=Shadowsocks Server
 After=network.target
 
 [Service]
-ExecStart=/root/go/bin/go-shadowsocks2 -s "0.0.0.0:16888" -cipher "aes-256-gcm" -password "amazongreatvpn" -verbose -u
+ExecStart=/root/go/bin/go-shadowsocks2 -s "0.0.0.0:16888" -cipher "aes-256-gcm" -password "amazongreatvpn" -verbose -udp
 Restart=on-failure
 
 [Install]
