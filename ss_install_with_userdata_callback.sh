@@ -21,8 +21,9 @@ echo "📦 开始更新系统包..."
 sudo -E apt update && sudo -E apt upgrade -y
 echo "✅ 系统包更新完成"
 
-echo "📦 开始安装基础依赖包（curl, git）..."
-sudo apt install -y curl git
+echo "📦 开始安装基础依赖包（curl, git,iptables）..."
+# 安装基础依赖并确保提供 iptables 命令，避免后续端口转发表达式失败
+sudo apt install -y curl git iptables
 echo "✅ 基础依赖包安装完成"
 
 # === 检测系统架构 ===

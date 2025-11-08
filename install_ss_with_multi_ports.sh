@@ -18,7 +18,8 @@ echo "🔧 开始安装 Shadowsocks（适配 ARM64）"
 
 # === 更新系统 ===
 sudo -E apt update && sudo -E apt upgrade -y
-sudo apt install -y curl git
+# 安装基础依赖并确保提供 iptables 命令，避免后续端口转发表达式失败
+sudo apt install -y curl git iptables
 
 # === 检测系统架构 ===
 ARCH=$(uname -m)
